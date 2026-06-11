@@ -1,0 +1,5 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "2026-05-02_00-30-50") (type "KiCad") (uri "C:/Users/mene_/Downloads/AP2114HA_1_2TRG1/KiCADv6/2026-05-02_00-30-50.kicad_sym") (options "") (descr ""))
+	(lib (name "PESD2CAN") (type "KiCad") (uri "C:/Users/mene_/Downloads/PESD2CAN_215/KiCADv6/2026-05-24_14-27-54.kicad_sym") (options "") (descr ""))
+)

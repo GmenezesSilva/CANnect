@@ -1,0 +1,62 @@
+# ==========================================
+# KiCad 10 (Hardware)
+# ==========================================
+*-save.kicad_sch
+*-save.kicad_pcb
+*.bak
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*-bak
+*.kicad_prl
+*.kicad_wks
+*.lock
+*.tmp
+*.bck
+fp-info-cache
+
+# Arquivos de Fabricação / Saídas da CNC
+gerber/
+fabrication/
+plots/
+*.gbr
+*.drl
+*.pos
+*.xml
+*.csv
+*.rpt
+
+# ==========================================
+# ESP-IDF 6.x (Firmware)
+# ==========================================
+firmware/build/
+build/
+managed_components/
+dependencies.lock
+sdkconfig
+sdkconfig.old
+*.map
+*.elf
+*.bin
+*.a
+*.o
+
+# Exceções para manter os arquivos de configuração padrão
+sdkconfig.defaults.*
+
+# ==========================================
+# IDE & Ferramentas Locais (VS Code)
+# ==========================================
+.vscode/
+.vs/
+*.code-workspace
+ipch/
+
+# ==========================================
+# Arquivos Não Utilizados / Temporários
+# ==========================================
+*.zip
+Dockerfile
+docker-compose.yml
+.dockerignore
+.DS_Store
+Thumbs.db
