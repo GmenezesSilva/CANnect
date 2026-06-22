@@ -21,4 +21,4 @@ static void usb_tx_task(void *pvParameters);
  * @brief Initialize all USB dependencies to the project
  * 
  */
-void usb_adapter_init(uint32_t usb_buff_size, QueueHandle_t to_can_queue, QueueHandle_t from_can_queue);
+void usb_adapter_init(uint32_t usb_buff_size, QueueHandle_t rx_queue, QueueHandle_t tx_queue);

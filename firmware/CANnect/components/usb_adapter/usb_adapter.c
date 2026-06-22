@@ -7,7 +7,6 @@
 #define USB_CORE 0
 #define TX_BUFFER_SIZE 64
 #define RX_BUFFER_SIZE 64
-#define QUEUE_LEN 10
 #define CDC_PORT TINYUSB_CDC_ACM_0
 #define USB_PRIORITY 5
 #define TASK_DEPTH 4096
@@ -31,8 +30,8 @@ static void usb_rx_task(void *pvParameters)
             uint32_t count = tud_cdc_read(rx_buffer, sizeof(rx_buffer));
             if(count > 0)
             {
+                ESP_LOGI(__FILE__, "Mensagem recebida");
                 xQueueSend(to_can, rx_buffer, portMAX_DELAY);
-        
             }
         }
     }
@@ -52,6 +51,7 @@ static void usb_tx_task(void *pvParameters)
             len = strlen((char *) buffer);
             tinyusb_cdcacm_write_queue(CDC_PORT, buffer, len);
             tinyusb_cdcacm_write_flush(CDC_PORT, pdMS_TO_TICKS(20));
+            ESP_LOGI(__FILE__, "Echo enviado");
         }
     }
 }
@@ -63,13 +63,21 @@ static void tusb_cdc_rx_cb(BaseType_t intflag, cdcacm_event_t *event)
     portYIELD_FROM_ISR(high_priority);
 }
 
-void usb_adapter_init(uint32_t usb_buff_size, QueueHandle_t to_can_queue, QueueHandle_t from_can_queue)
+void usb_adapter_init(uint32_t usb_buff_size, QueueHandle_t rx_queue, QueueHandle_t tx_queue)
 {
-    tinyusb_config_t tusb_config = {0};
+    const tinyusb_config_t tusb_config = {
+        .task = {
+            .size     = TASK_DEPTH,
+            .priority = USB_PRIORITY,
+            .xCoreID  = USB_CORE,
+        }
+    };
+
     const tinyusb_config_cdcacm_t acm_cfg = {
     .cdc_port = CDC_PORT,
-    .callback_rx = tusb_cdc_rx_cb,
+    .callback_rx = tusb_cdc_rx_cb
     };
+    
     
     ESP_LOGI(__FILE__, "TinyUSB CDC initializing...");
     
@@ -80,7 +88,7 @@ void usb_adapter_init(uint32_t usb_buff_size, QueueHandle_t to_can_queue, QueueH
         usb_rx_task,
         "USB RX task",
         TASK_DEPTH,           
-        to_can_queue,
+        rx_queue,
         USB_PRIORITY,               
         &usb_rx_task_handle,
         USB_CORE
@@ -90,7 +98,7 @@ void usb_adapter_init(uint32_t usb_buff_size, QueueHandle_t to_can_queue, QueueH
         usb_tx_task,
         "USB TX task",
         TASK_DEPTH,          
-        from_can_queue,
+        tx_queue,
         USB_PRIORITY,               
         NULL,
         USB_CORE
