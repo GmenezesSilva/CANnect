@@ -15,8 +15,8 @@ static QueueHandle_t can_usb_queue = NULL;
 void app_main(void)
 {   
     
-    QueueHandle_t usb_can_queue = xQueueCreate(QUEUE_LEN, sizeof(usb_frame));
-    QueueHandle_t can_usb_queue = xQueueCreate(QUEUE_LEN, sizeof(twai_message_t));
+    usb_can_queue = xQueueCreate(QUEUE_LEN, sizeof(usb_frame));
+    can_usb_queue = xQueueCreate(QUEUE_LEN, sizeof(twai_frame_t));
     
     usb_adapter_init(USB_BUF_SIZE, usb_can_queue, can_usb_queue);
 }

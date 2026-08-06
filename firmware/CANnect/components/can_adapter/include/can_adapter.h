@@ -17,6 +17,7 @@
 #define CAN_TASK_SIZE 4096
 #define CAN_CORE 0
 #define CAN_TASK_PRIORITY 5
+#define CAN_ADAPTER_MAX_DATA_LEN 8  // 8 is from std CAN and 2.0, need to change to 64 for CANFD
 
 typedef struct
 {
@@ -27,5 +28,14 @@ typedef struct
     QueueHandle_t can_tx_queue;
     size_t queue_size;
 }can_adapter_config_t;
+
+
+typedef struct {
+    uint32_t id;
+    uint8_t dlc;
+    bool extd;
+    uint8_t data[CAN_ADAPTER_MAX_DATA_LEN];
+} can_adapter_frame_t;
+
 
 esp_err_t can_adapter_init(const can_adapter_config_t *config);
