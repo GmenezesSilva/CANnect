@@ -14,9 +14,6 @@
 #include "freertos/task.h"
 #include "freertos/queue.h"
 
-static void usb_rx_task(void *pvParameters);
-static void usb_tx_task(void *pvParameters);
-
 /**
  * @brief Initialize all USB dependencies to the project
  * 
