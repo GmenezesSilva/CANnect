@@ -1,0 +1,27 @@
+menu "CANnect"
+
+config CAN_TX_GPIO
+    int "CAN TX GPIO"
+    range -1 48
+    default -1
+    help
+        ESP32-S3 GPIO connected to the CAN transceiver TXD input.
+        Set to a valid GPIO before using the CAN adapter.
+
+config CAN_RX_GPIO
+    int "CAN RX GPIO"
+    range -1 48
+    default -1
+    help
+        ESP32-S3 GPIO connected to the CAN transceiver RXD output.
+        Set to a valid GPIO before using the CAN adapter.
+
+config CAN_BITRATE
+    int "CAN bitrate (bits per second)"
+    range 10000 1000000
+    default 500000
+    help
+        Initial CAN bitrate. The SLCAN bitrate command can change this
+        only if the CAN adapter exposes bitrate reconfiguration.
+
+endmenu
