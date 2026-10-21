@@ -121,7 +121,7 @@ TEST_CASE("slcan_deserialize: extended frame", "[slcan]")
     twai_frame_t frame = {0};
     uint8_t buf[8] = {0};
 
-    TEST_ASSERT_EQUAL(SLCAN_OK, slcan_deserialize("T000004B0211223344\r", &frame, buf, sizeof(buf)));
+    TEST_ASSERT_EQUAL(SLCAN_OK, slcan_deserialize("T000004B021122\r", &frame, buf, sizeof(buf)));
     TEST_ASSERT_EQUAL_UINT32(0x4B0, frame.header.id);
     TEST_ASSERT_EQUAL_UINT8(1, frame.header.ide);
     TEST_ASSERT_EQUAL_UINT8(2, frame.header.dlc);
@@ -154,6 +154,30 @@ TEST_CASE("slcan_deserialize: dlc exceeds 8", "[slcan]")
     uint8_t buf[8] = {0};
 
     TEST_ASSERT_EQUAL(SLCAN_ERROR, slcan_deserialize("t1239\r", &frame, buf, sizeof(buf)));
+}
+
+TEST_CASE("slcan_deserialize: rejects truncated payload", "[slcan]")
+{
+    twai_frame_t frame = {0};
+    uint8_t buf[8] = {0};
+
+    TEST_ASSERT_EQUAL(SLCAN_ERROR, slcan_deserialize("t123211\r", &frame, buf, sizeof(buf)));
+}
+
+TEST_CASE("slcan_deserialize: rejects invalid hex", "[slcan]")
+{
+    twai_frame_t frame = {0};
+    uint8_t buf[8] = {0};
+
+    TEST_ASSERT_EQUAL(SLCAN_ERROR, slcan_deserialize("t12G111\r", &frame, buf, sizeof(buf)));
+}
+
+TEST_CASE("slcan_deserialize: rejects out-of-range standard id", "[slcan]")
+{
+    twai_frame_t frame = {0};
+    uint8_t buf[8] = {0};
+
+    TEST_ASSERT_EQUAL(SLCAN_ERROR, slcan_deserialize("t8000\r", &frame, buf, sizeof(buf)));
 }
 
 TEST_CASE("slcan_deserialize: unsupported command", "[slcan]")
@@ -223,6 +247,19 @@ TEST_CASE("slcan_serialize: dlc exceeds 8", "[slcan]")
         .header = {.id = 0x100, .ide = 0, .dlc = 9},
     };
     char buf[32] = {0};
+
+    TEST_ASSERT_EQUAL(SLCAN_ERROR, slcan_serialize(&frame, buf, sizeof(buf)));
+}
+
+TEST_CASE("slcan_serialize: rejects short output buffer", "[slcan]")
+{
+    uint8_t data[] = {0x11};
+    twai_frame_t frame = {
+        .header = {.id = 0x123, .ide = 0, .dlc = 1},
+        .buffer = data,
+        .buffer_len = sizeof(data),
+    };
+    char buf[7] = {0};
 
     TEST_ASSERT_EQUAL(SLCAN_ERROR, slcan_serialize(&frame, buf, sizeof(buf)));
 }

@@ -21,8 +21,6 @@
  */
 #pragma once
 
-#pragma once
-
 #include "esp_twai_types.h"
 #include <stdint.h>
 #include <stddef.h>

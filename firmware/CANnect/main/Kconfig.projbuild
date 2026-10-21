@@ -21,7 +21,7 @@ config CAN_BITRATE
     range 10000 1000000
     default 500000
     help
-        Initial CAN bitrate. The SLCAN bitrate command can change this
-        only if the CAN adapter exposes bitrate reconfiguration.
+        CAN bitrate used by the hardware and accepted by python-can's
+        SLCAN bitrate command. Reconfigure this value to change the rate.
 
 endmenu

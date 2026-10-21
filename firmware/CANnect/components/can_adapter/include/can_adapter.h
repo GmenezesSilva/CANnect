@@ -39,3 +39,7 @@ typedef struct {
 
 
 esp_err_t can_adapter_init(const can_adapter_config_t *config);
+esp_err_t can_adapter_open(void);
+esp_err_t can_adapter_close(void);
+esp_err_t can_adapter_set_bitrate(uint32_t bitrate);
+esp_err_t can_adapter_transmit(const can_adapter_frame_t *frame);

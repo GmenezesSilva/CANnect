@@ -11,11 +11,7 @@
 #pragma once
 
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 #include "freertos/queue.h"
+#include "esp_err.h"
 
-/**
- * @brief Initialize all USB dependencies to the project
- * 
- */
-void usb_adapter_init(uint32_t usb_buff_size, QueueHandle_t rx_queue, QueueHandle_t tx_queue);
+esp_err_t usb_adapter_init(uint32_t usb_buff_size, QueueHandle_t can_rx_queue, uint32_t can_bitrate);
